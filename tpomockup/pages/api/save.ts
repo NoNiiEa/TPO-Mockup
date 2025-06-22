@@ -1,21 +1,22 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import clientPromise from '@/lib/mongo';
+import connectToDatabase from '../../lib/mongoose';
+import Report from '../../models/report';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
-  }
+    if (req.method === 'POST') {
+        try {
+            await connectToDatabase();
+            const reportData = req.body;
+            const report = new Report(reportData);
+            await report.save();
 
-  try {
-    const client = await clientPromise;
-    const db = client.db('police-report');
-    const collection = db.collection('reports');
-
-    const result = await collection.insertOne(req.body);
-
-    return res.status(200).json({ message: 'Saved', id: result.insertedId });
-  } catch (err) {
-    console.error('Error saving report:', err);
-    return res.status(500).json({ message: 'Server error' });
-  }
+            return res.status(201).json({ message: 'Report saved successfully', report });
+        } catch (error) {
+            console.error('Error saving report:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+    } else {
+        res.setHeader('Allow', ['POST']);
+        return res.status(405).end(`Method ${req.method} Not Allowed`);
+    }
 }
