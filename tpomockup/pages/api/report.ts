@@ -15,6 +15,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.error('Error saving report:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
+    } else if (req.method === 'GET') {
+        try {
+            await connectToDatabase();
+            const reports = await Report.find({});
+            return res.status(200).json(reports);
+        } catch (error) {
+            console.error('Error fetching reports:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
     } else {
         res.setHeader('Allow', ['POST']);
         return res.status(405).end(`Method ${req.method} Not Allowed`);
