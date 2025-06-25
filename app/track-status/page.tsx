@@ -1,4 +1,25 @@
-export default function TrackStatusPage() {
+import Report from '@/models/report';
+import mongoose from 'mongoose';
+
+async function getReports() {
+    try {
+        await mongoose.connect(process.env.MONGODB_URI, {
+            serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds
+            connectTimeoutMS: 10000, // Connection timeout
+        });
+        const reports = await Report.find().lean();
+        return JSON.parse(JSON.stringify(reports));
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+        return []; // Return empty array on error
+    } finally {
+        await mongoose.connection.close(); // Close connection after query
+    }
+}
+
+export default async function TrackStatusPage() {
+    const reports = await getReports();
+
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-start p-6">
             <h1 className="text-2xl font-bold text-blue-900 mb-4">Track Status</h1>
@@ -29,27 +50,40 @@ export default function TrackStatusPage() {
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="bg-blue-900 text-white">
-                            <th className="p-2">Date</th>
-                            <th className="p-2">Status</th>
-                            <th className="p-2">Details</th>
-                            <th className="p-2">Action</th>
+                            <th className="p-2">จัดการ</th>
+                            <th className="p-2">เพิ่มเลขอ้างอิงธนาคาร</th>
+                            <th className="p-2">เลือกสถานีที่สะดวก</th>
+                            <th className="p-2">รายงาน</th>
+                            <th className="p-2">เลขรับแจ้งความออนไลน์</th>
+                            <th className="p-2">รายละเอียดการเกิดเหตุโดยย่อ</th>
+                            <th className="p-2">หน่วยงาน</th>
+                            <th className="p-2">พนักงานสืบสวน</th>
+                            <th className="p-2">วันที่แจ้งเหตุ</th>
+                            <th className="p-2">สถานะคดี</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="border-b">
-                            <td className="p-2">2025-06-25</td>
-                            <td className="p-2">In Progress</td>
-                            <td className="p-2">Processing...</td>
-                            <td className="p-2">View</td>
-                        </tr>
-                        {/* Add more rows as needed */}
+                        {reports.map((report) => (
+                            <tr key={report._id} className="border-b">
+                                <td className="p-2 text-black">Edit</td>
+                                <td className="p-2 text-black">{report.tranfers.length > 0 ? report.tranfers[0].accessNumber : 'N/A'}</td>
+                                <td className="p-2 text-black">{report.avaliableAgency.agencyName}</td>
+                                <td className="p-2 text-black">{report.crimeTitle}</td>
+                                <td className="p-2 text-black">{report._id}</td>
+                                <td className="p-2 text-black">{report.crimeDescription}</td>
+                                <td className="p-2 text-black">{report.unit}</td>
+                                <td className="p-2 text-black">N/A</td>
+                                <td className="p-2 text-black">{new Date(report.datetime).toLocaleDateString()}</td>
+                                <td className="p-2 text-black">{report.status === 'pending' ? 'รออนุมัติ' : report.status === 'in_progress' ? 'ระหว่างดำเนินการ' : report.status === 'resolved' ? 'เสร็จสิ้น' : 'ถูกปฏิเสธ'}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
 
                 {/* Pagination */}
                 <div className="mt-4 flex justify-between items-center">
                     <span>10 20 50</span>
-                    <span>Page 1 of 1 (1 items)</span>
+                    <span>Page 1 of 1 ({reports.length} items)</span>
                 </div>
             </div>
         </div>
