@@ -43,14 +43,16 @@ const RepoertSchema = new mongoose.Schema({
     },
     crimeTitle: { type: String, required: true },
     crimeDescription: { type: String, required: true },
-    tranfers : {
-        type: {
-            owner: {type: String, required: true},
-            accountType: { type: String, required: true },
-            bankName: { type: String, required: true },
-            accessNumber: { type: String, required: true },
-            accountName: { type: String, required: true },
-        },
+    tranfers: {
+        type: [
+            {
+                owner: { type: String, required: true },
+                accountType: { type: String, required: true },
+                bankName: { type: String, required: true },
+                accessNumber: { type: String, required: true },
+                accountName: { type: String, required: true },
+            }
+        ],
         default: [],
     },
     datetime: {
