@@ -111,6 +111,7 @@ const StepThreeForm = () => {
             className="input input-md w-full"
             onChange={(e) => handleChange('prefix', e.target.value)}
             value={formData.prefix}
+            required={true}
           >
             <option value="">เลือก</option>
             <option>นาย</option>
@@ -126,6 +127,7 @@ const StepThreeForm = () => {
             className="input input-md w-full"
             onChange={(e) => handleChange('idCard', e.target.value)}
             value={formData.idCard}
+            required={true}
           />
         </label>
         <label className="floating-label w-full">
@@ -136,6 +138,7 @@ const StepThreeForm = () => {
             className="input input-md w-full"
             onChange={(e) => handleChange('firstName', e.target.value)}
             value={formData.firstName}
+            required={true}
           />
         </label>
         <label className="floating-label w-full">
@@ -146,6 +149,7 @@ const StepThreeForm = () => {
             className="input input-md w-full"
             onChange={(e) => handleChange('lastName', e.target.value)}
             value={formData.lastName}
+            required={true}
           />
         </label>
         <label className="floating-label w-full">
@@ -156,6 +160,7 @@ const StepThreeForm = () => {
             className="input input-md w-full"
             onChange={(e) => handleChange('email', e.target.value)}
             value={formData.email}
+            required={true}
           />
         </label>
         <label className="floating-label w-full">
@@ -166,6 +171,7 @@ const StepThreeForm = () => {
             className="input input-md w-full"
             onChange={(e) => handleChange('phoneNumber', e.target.value)}
             value={formData.phoneNumber}
+            required={true}
           />
         </label>
         <label className="floating-label w-full">
@@ -186,6 +192,7 @@ const StepThreeForm = () => {
               handleBirthChange('month', month);
               handleBirthChange('day', day);
             }}
+            required={true}
           />
         </label>
         <label className="select w-full">
@@ -194,6 +201,7 @@ const StepThreeForm = () => {
             className="input input-md w-full"
             onChange={(e) => handleChange('phoneCarrier', e.target.value)}
             value={formData.phoneCarrier}
+            required={true}
           >
             <option value="">เลือก</option>
             <option>AIS</option>
@@ -215,6 +223,7 @@ const StepThreeForm = () => {
               value={formData.idCardAddress[key as keyof Address]}
               onChange={(e) => handleAddressChange('idCardAddress', key as keyof Address, e.target.value)}
               className="input input-md w-full"
+              required={true}
             />
           </label>
         ))}
@@ -228,6 +237,7 @@ const StepThreeForm = () => {
           checked={sameAddress}
           onChange={() => setSameAddress((prev) => !prev)}
           className="mr-2"
+          required={true}
         />
         <label htmlFor="sameAddress" className="text-sm">
           ที่อยู่ปัจจุบันเหมือนกับที่อยู่ตามบัตรประชาชน
@@ -246,6 +256,7 @@ const StepThreeForm = () => {
               onChange={(e) => handleCurrentAddressChange(key as keyof Address, e.target.value)}
               className="input input-md w-full"
               disabled={sameAddress}
+              required={true}
             />
           </label>
         ))}
