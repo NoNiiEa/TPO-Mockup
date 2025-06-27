@@ -1,4 +1,3 @@
-// Define the Report interface based on your schema
 interface Report {
     _id: string;
     CrimeType: string;
@@ -20,7 +19,7 @@ interface Report {
     crimeTitle: string;
     crimeDescription: string;
     tranfers: { owner: string; accountType: string; bankName: string; accessNumber: string; accountName: string }[];
-    datetime: string; // Adjusted to string since JSON might return it as ISO string
+    datetime: string; 
     unit: string;
     amount: number;
     frudDetails: string;
@@ -30,12 +29,12 @@ interface Report {
 }
 
 async function getReports() {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'; // Fallback URL
-    const res = await fetch(`${baseUrl}/api/reports`, {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const res = await fetch(`${baseUrl}/api/report`, {
         cache: 'no-store',
     });
     if (!res.ok) return [];
-    return res.json() as Promise<Report[]>; // Type assertion for the returned data
+    return res.json() as Promise<Report[]>; 
 }
 
 export default async function TrackStatusPage() {
