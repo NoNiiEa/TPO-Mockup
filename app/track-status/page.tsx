@@ -30,7 +30,8 @@ interface Report {
 }
 
 async function getReports() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reports`, {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'; // Fallback URL
+    const res = await fetch(`${baseUrl}/api/reports`, {
         cache: 'no-store',
     });
     if (!res.ok) return [];
