@@ -183,10 +183,16 @@ const FiveForm = () => {
           <label className="block text-sm">วันและเวลา</label>
           <input
             type="datetime-local"
-            name="dateTime"
-            value={reportData.datetime ? reportData.datetime.toISOString().split('T')[0] + 'T' + reportData.datetime.toISOString().split('T')[1] : ''}
+            name="datetime"
+            value={
+              reportData.datetime
+                ? typeof reportData.datetime === 'string'
+                  ? reportData.datetime
+                  : new Date(reportData.datetime).toISOString().slice(0, 16)
+                : ""
+            }
             onChange={handleInputChange}
-            className="w-full p-2 border rounded"
+            className="input"
           />
         </div>
         <div>
