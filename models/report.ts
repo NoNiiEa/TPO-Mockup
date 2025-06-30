@@ -37,9 +37,9 @@ const RepoertSchema = new mongoose.Schema({
         agencyType: { type: String, default: "None"},
     },
     avaliableAgency: {
-        province: { type: String, required: true },
-        agencyName: { type: String, required: true },
-        agencyType: { type: String, required: true },
+        province: { type: String, default: "None"},
+        agencyName: { type: String, default: "None"},
+        agencyType: { type: String, default: "None"},
     },
     crimeTitle: { type: String, required: true },
     crimeDescription: { type: String, required: true },
