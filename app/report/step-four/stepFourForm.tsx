@@ -1,5 +1,5 @@
 'use client';
-import { useState } from "react";
+import { useDebugValue, useEffect, useState } from "react";
 import { useReportForm } from '@/contexts/ReportFormContext';
 import { useRouter } from 'next/navigation';
 
@@ -11,6 +11,21 @@ const StepFourForm = () => {
     const [havePreviousAgency, setHavePreviousAgency] = useState<boolean>(
         false
     );
+
+    useEffect(() => {
+      if (havePreviousAgency === false) {
+        setPrevProvince("");
+        setPrevAgencyName("");
+        setPrevAgencyType("");
+        updateReport({
+          previousAgency: {
+            province: "",
+            agencyName: "",
+            agencyType: ""
+          }
+        });
+      }
+    }, [havePreviousAgency]);
 
     const [prevProvince, setPrevProvince] = useState(reportData?.previousAgency?.province ?? "");
     const [prevAgencyName, setPrevAgencyName] = useState(reportData?.previousAgency?.agencyName ?? "");
@@ -64,7 +79,7 @@ const StepFourForm = () => {
     };
 
   return (
-    <form className="bg-gray-100 border border-gray-300 rounded-md p-10 text-black w-full">
+    <form className="bg-gray-100 border border-gray-300 rounded-md p-10 text-black w-full" onSubmit={handleSubmit}>
       <h2 className="text-xl font-semibold mb-6">ขั้นตอนที่ 4: เรื่องที่แจ้ง</h2>
       <p className="mb-6 text-lg text-blue-800">
         ท่านเคยไปพบพนักงานสอบสวนในคดีนี้มาแล้วหรือไม่ เลือกหน่วยงาน
@@ -81,6 +96,7 @@ const StepFourForm = () => {
               updateField("havePreviousAgency", true);
             }}
             checked={havePreviousAgency === true}
+            required={true}
           />
           <span className="text-lg">เคย</span>
         </label>
@@ -93,8 +109,19 @@ const StepFourForm = () => {
             onChange={() => {
               setHavePreviousAgency(false);
               updateField("havePreviousAgency", false);
+              setPrevProvince("None");
+              setPrevAgencyName("None");
+              setPrevAgencyType("None");
+              updateReport({
+                previousAgency: {
+                  province: "None",
+                  agencyName: "None",
+                  agencyType: "None"
+                }
+              });
             }}
             checked={havePreviousAgency === false}
+            required={true}
           />
           <span className="text-lg">ไม่เคย</span>
         </label>
@@ -111,6 +138,7 @@ const StepFourForm = () => {
                 setPrevAgencyType(e.target.value);
                 updateField("prevAgencyType", e.target.value);
               }}
+              required={true}
             >
               <option value="">เลือกประเภท</option>
               <option value="police-station">สถานีตำรวจ</option>
@@ -130,6 +158,7 @@ const StepFourForm = () => {
                 updateField("prevProvince", e.target.value);
               }}
               disabled={prevAgencyType === "central-investigation" ? true : false}
+              required={true}
             />
           </label>
           <label className="block">
@@ -144,6 +173,7 @@ const StepFourForm = () => {
                 updateField("prevAgencyName", e.target.value);
               }}
               disabled={prevAgencyType === "tech-investigation" || prevAgencyType === "central-investigation" ? true : false}
+              required={true}
             />
           </label>
         </div>
@@ -162,6 +192,7 @@ const StepFourForm = () => {
               setAvailAgencyType(e.target.value);
               updateField("availAgencyType", e.target.value);
             }}
+            required={true}
           >
             <option value="">เลือกประเภท</option>
             <option value="police-station">สถานีตำรวจ</option>
@@ -181,6 +212,7 @@ const StepFourForm = () => {
               updateField("availProvince", e.target.value);
             }}
             disabled={availAgencyType === "central-investigation"}
+            required={true}
           />
         </label>
         <label className="block">
@@ -195,6 +227,7 @@ const StepFourForm = () => {
               updateField("availAgencyName", e.target.value);
             }}
             disabled={availAgencyType === "tech-investigation" || availAgencyType === "central-investigation"}
+            required={true}
           />
         </label>
       </div>
@@ -213,7 +246,7 @@ const StepFourForm = () => {
               value={crimeTitle}
               onChange={e => {
                 setCrimeTitle(e.target.value);
-                updateField("crimeTitle", e.target.value);
+                updateReport({ crimeTitle: e.target.value });
               }}
               placeholder="ประเภทของเรื่องที่แจ้ง"
               required={true}
@@ -232,7 +265,7 @@ const StepFourForm = () => {
               value={crimeDescription}
               onChange={e => {
                 setCrimeDescription(e.target.value);
-                updateField("crimeDescription", e.target.value);
+                updateReport({ crimeDescription: e.target.value });
               }}
               required={true}
             />

@@ -34,12 +34,26 @@ export default function StepOneForm() {
                             value={item}
                             checked={DamageType === item}
                             onChange={() => setDamageType(item)}
-                            required
+                            required={true}
                         />
                         <span>{item}</span>
                     </label>
                 ))}
             </div>
+
+            {DamageType === "เงิน" && (
+                <div className="mt-6 ml-8 flex flex-col gap-4 mb-6">
+                    <p>กรุณากรอก BankcaseID </p>
+                    <input
+                        type="text"
+                        name="bankcaseID"
+                        value={reportData.BankCaseID}
+                        onChange={(e) => updateReport({ BankCaseID: e.target.value })}
+                        className="input w-full p-2 border rounded"
+                        required={true}
+                    />
+                </div>
+            )}
 
             <div className="text-right">
                 <button

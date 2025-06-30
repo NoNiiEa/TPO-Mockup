@@ -229,7 +229,6 @@ const StepThreeForm = () => {
         ))}
       </div>
 
-      {/* Checkbox for same address */}
       <div className="flex items-center mb-4">
         <input
           type="checkbox"
@@ -237,7 +236,6 @@ const StepThreeForm = () => {
           checked={sameAddress}
           onChange={() => setSameAddress((prev) => !prev)}
           className="mr-2"
-          required={true}
         />
         <label htmlFor="sameAddress" className="text-sm">
           ที่อยู่ปัจจุบันเหมือนกับที่อยู่ตามบัตรประชาชน
