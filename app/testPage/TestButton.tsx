@@ -40,13 +40,22 @@ async function HandleClick() {
     },
     crimeTitle: 'Fraudulent Transfer',
     crimeDescription: 'Scammer tricked user to send money.',
-    tranfers: {
+    tranfers: [
+      {
       owner: 'Jane Doe',
       accountType: 'Savings',
       bankName: 'Krungthai',
       accessNumber: '123-456-7890',
       accountName: 'Jane Doe',
     },
+      {
+      owner: 'John Smith',
+      accountType: 'Checking',
+      bankName: 'Bangkok Bank',
+      accessNumber: '098-765-4321',
+      accountName: 'John Smith',
+    }
+    ],
     datetime: new Date().toISOString(),
     unit: 'Cyber Unit',
     amount: 5000,
