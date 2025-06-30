@@ -1,20 +1,40 @@
-import Report from '@/models/report';
-import mongoose from 'mongoose';
+interface Report {
+    _id: string;
+    CrimeType: string;
+    BankCaseID: string;
+    user: {
+        prefix: string;
+        firstName: string;
+        lastName: string;
+        idCard: string;
+        email: string;
+        phoneNumber: string;
+        phoneCarrier: string;
+        birthDate: { day: number; month: number; year: number };
+        idCardAddress: { address: string; district: string; subDistrict: string; province: string; postalCode: string };
+        currentAddress: { address: string; district: string; subDistrict: string; province: string; postalCode: string };
+    };
+    previousAgency: { province: string; agencyName: string; agencyType: string };
+    avaliableAgency: { province: string; agencyName: string; agencyType: string };
+    crimeTitle: string;
+    crimeDescription: string;
+    tranfers: { owner: string; accountType: string; bankName: string; accessNumber: string; accountName: string }[];
+    datetime: string; 
+    unit: string;
+    amount: number;
+    frudDetails: string;
+    status: 'pending' | 'in_progress' | 'resolved' | 'rejected';
+    createdAt?: string;
+    updatedAt?: string;
+}
 
 async function getReports() {
-    try {
-        await mongoose.connect(process.env.MONGODB_URI, {
-            serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds
-            connectTimeoutMS: 10000, // Connection timeout
-        });
-        const reports = await Report.find().lean();
-        return JSON.parse(JSON.stringify(reports));
-    } catch (error) {
-        console.error('MongoDB connection error:', error);
-        return []; // Return empty array on error
-    } finally {
-        await mongoose.connection.close(); // Close connection after query
-    }
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const res = await fetch(`${baseUrl}/api/report`, {
+        cache: 'no-store',
+    });
+    if (!res.ok) return [];
+    return res.json() as Promise<Report[]>; 
 }
 
 export default async function TrackStatusPage() {
@@ -63,18 +83,26 @@ export default async function TrackStatusPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {reports.map((report) => (
+                        {(reports ?? []).map((report) => (
                             <tr key={report._id} className="border-b">
                                 <td className="p-2 text-black">Edit</td>
-                                <td className="p-2 text-black">{report.tranfers.length > 0 ? report.tranfers[0].accessNumber : 'N/A'}</td>
-                                <td className="p-2 text-black">{report.avaliableAgency.agencyName}</td>
+                                <td className="p-2 text-black">{report.tranfers?.length > 0 ? report.tranfers[0].accessNumber : 'N/A'}</td>
+                                <td className="p-2 text-black">{report.avaliableAgency?.agencyName || 'N/A'}</td>
                                 <td className="p-2 text-black">{report.crimeTitle}</td>
                                 <td className="p-2 text-black">{report._id}</td>
                                 <td className="p-2 text-black">{report.crimeDescription}</td>
                                 <td className="p-2 text-black">{report.unit}</td>
                                 <td className="p-2 text-black">N/A</td>
-                                <td className="p-2 text-black">{new Date(report.datetime).toLocaleDateString()}</td>
-                                <td className="p-2 text-black">{report.status === 'pending' ? 'รออนุมัติ' : report.status === 'in_progress' ? 'ระหว่างดำเนินการ' : report.status === 'resolved' ? 'เสร็จสิ้น' : 'ถูกปฏิเสธ'}</td>
+                                <td className="p-2 text-black">{report.datetime ? new Date(report.datetime).toLocaleDateString() : 'N/A'}</td>
+                                <td className="p-2 text-black">
+                                    {report.status === 'pending'
+                                        ? 'รออนุมัติ'
+                                        : report.status === 'in_progress'
+                                        ? 'ระหว่างดำเนินการ'
+                                        : report.status === 'resolved'
+                                        ? 'เสร็จสิ้น'
+                                        : 'ถูกปฏิเสธ'}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
