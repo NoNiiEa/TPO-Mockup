@@ -14,7 +14,7 @@ interface MenuItem {
 }
 
 const Sidebar = () => {
-  const pathname = usePathname();
+  const pathname = usePathname() || '/';
   
   const menuItems: MenuItem[] = [
     {
@@ -58,8 +58,10 @@ const Sidebar = () => {
         {/* Navigation Menu */}
         <nav className="space-y-1">
           {menuItems.map((item, index) => {
-            const isActive = pathname === item.href;
-            
+            const isActive =
+              pathname === item.href ||
+              (item.href !== "/" && pathname.startsWith(item.href + "/"));
+
             return (
               <Link
                 key={index}
