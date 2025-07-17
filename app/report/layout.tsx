@@ -1,4 +1,3 @@
-"use client";
 import React from 'react';
 import StepNavigator from "@/components/ReportPage/StepNavigator";
 import { ReportFormProvider } from '@/contexts/ReportFormContext';
