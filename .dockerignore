@@ -1,0 +1,29 @@
+# Node dependencies
+node_modules
+npm-debug.log
+
+# Build output
+.next
+out
+dist
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+.DS_Store
+
+# Local environment settings
+.env
+.env.*     # Includes .env.local, .env.development, etc.
+
+# OS-specific
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Dockerfile and dockerignore itself (optional)
+Dockerfile
+.dockerignore
