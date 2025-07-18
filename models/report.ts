@@ -78,5 +78,5 @@ const RepoertSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-const Report = mongoose.models.Report || mongoose.model('Report', RepoertSchema);
+const Report = mongoose.models.Report || mongoose.model('case', RepoertSchema);
 export default Report;
