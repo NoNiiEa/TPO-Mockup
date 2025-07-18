@@ -10,7 +10,9 @@ const StepSevenReview = () => {
   const HandleSubmit = async () => {
     const response = await HandleSubmitReport(reportData);
     if (response) {
+      alert("ส่งข้อมูลสำเร็จ")
       resetReport();
+      localStorage.removeItem('agreement_checked');
     } else {
       alert("ส่งข้อมูลไม่สำเร็จ");
     }
