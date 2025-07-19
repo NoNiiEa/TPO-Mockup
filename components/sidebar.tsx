@@ -27,11 +27,6 @@ const Sidebar = () => {
       title: "แจ้งเรื่องใหม่",
       href: "/report"
     },
-    {
-      icon: <FileText size={20} />,
-      title: "test",
-      href: "/testPage"
-    }
   ];
 
   return (
